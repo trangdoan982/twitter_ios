@@ -19,10 +19,10 @@ class HomeTableTableViewController: UITableViewController {
         UserDefaults.standard.set(false, forKey: "userLoggedIn")
     }
     
-    func loadTweet() {
+    @objc func loadTweet() {
         
         let myUrl = "https://api.twitter.com/1.1/statuses/home_timeline.json"
-        let myParams = ["count": 10]
+        let myParams = ["count": 20]
 
         TwitterAPICaller.client?.getDictionariesRequest(url: myUrl, parameters: myParams, success: { (tweets: [NSDictionary]) in
             
@@ -35,17 +35,27 @@ class HomeTableTableViewController: UITableViewController {
             
         }, failure: { (Error) in
             print("Couldn't load tweet")
+            print("\(Error)")
         })
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         loadTweet()
-
+        refreshControl?.addTarget(self, action: #selector(loadTweet), for: .valueChanged)
+        self.tableView.refreshControl = refreshControl
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 190
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.loadTweet()
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,6 +71,9 @@ class HomeTableTableViewController: UITableViewController {
         if let imageData = data {
             cell.profileimageView.image = UIImage(data: imageData)
         }
+        
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.tweetID = tweetArray[indexPath.row]["id"] as! Int
         
         return cell
     }
