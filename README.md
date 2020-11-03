@@ -17,7 +17,7 @@ Here's a walkthrough of implemented user stories:
 
 <img src='https://media.giphy.com/media/r3Tr25sLJJGmHNELpz/giphy.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-# Project 3 - *Twitter*
+# Twitter - Part I
 
 **Twitter** is a basic twitter app to read your tweets.
 
